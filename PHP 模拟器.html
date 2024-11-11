@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PHP 模拟器</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+        }
+        textarea {
+            width: 100%;
+            height: 200px;
+            font-family: monospace;
+            font-size: 14px;
+        }
+        .output {
+            background-color: #f4f4f4;
+            padding: 10px;
+            margin-top: 20px;
+            white-space: pre-wrap;
+            border: 1px solid #ccc;
+        }
+    </style>
+</head>
+<body>
+    <h1>PHP 在线模拟器</h1>
+    <form method="post" action="">
+        <label for="phpcode">输入您的 PHP 代码：</label><br>
+        <textarea id="phpcode" name="phpcode" placeholder="输入PHP代码"></textarea><br><br>
+        <button type="submit">运行代码</button>
+    </form>
+
+    <?php
+        if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['phpcode'])) {
+            $code = $_POST['phpcode'];
+
+            // 安全警告：在实际生产中请勿直接执行用户输入的代码，除非进行适当的安全检查。
+            echo "<h2>输出结果:</h2>";
+            echo "<div class='output'>";
+            try {
+                eval($code); // 执行用户的PHP代码
+            } catch (ParseError $e) {
+                echo "解析错误: " . $e->getMessage();
+            } catch (Throwable $e) {
+                echo "运行时错误: " . $e->getMessage();
+            }
+            echo "</div>";
+        }
+    ?>
+</body>
+</html>
